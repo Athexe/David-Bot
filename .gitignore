@@ -1,0 +1,6 @@
+.env
+config.yml
+__pycache__
+*.session
+venv
+.config
