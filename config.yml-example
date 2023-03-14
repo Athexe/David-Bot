@@ -1,0 +1,26 @@
+
+# The channel names that you'd like to forward messages from. Just add input telegram channel names here.
+# The user running the client must have these channels present on it's dialogs. 
+input_channel_names:
+  - 'channel_name1'
+  - 'channel_name2'
+  - 'channel_name3'
+
+# The channel IDs that you'd like to forward messages from. Just get channel id from channels you put as input_channel_names above (You can get a channel ID by forwarding any message from it to @userinfobot , and removing the -100 from the start ) 
+input_channel_ids:
+  - id1
+  - id2
+  - id3
+
+# The output channel names that the messages will be forwarded to.
+# The user running the client must have a write access to those channels, and have the channels present on theirs dialogs.
+output_channel_names: 
+  - 'Output_Channel1'
+  - 'Output_Channel2'
+
+# The output channel IDs that the messages will be forwarded to. Just get channel id from channels you put as output_channel_names above (You can get a channel ID by forwarding any message from it to @userinfobot , and removing the -100 from the start )
+output_channel_ids: 
+  - id1
+
+# Do not touch this: 
+input_channel_ids: []
