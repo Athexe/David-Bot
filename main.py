@@ -2,19 +2,17 @@ from telethon import TelegramClient, events
 from telethon.tl.types import InputChannel
 import yaml
 import sys
-import logging
 import os
 from dotenv import load_dotenv
 from webserver import keep_alive
 import subprocess
 
+# Loading configuration
 load_dotenv()
 
 def start(config):
   # Telegram Client Init
-  client = TelegramClient(os.getenv("SESSION_NAME"), os.getenv("API_ID"),
-                          os.getenv("API_HASH"))
-  # Telegram Client Start
+  client = TelegramClient(os.getenv("SESSION_NAME"), os.getenv("API_ID"), os.getenv("API_HASH"))
   client.start()
 
   # Input Messages Telegram Channels will be stored in these empty Entities
@@ -32,30 +30,33 @@ def start(config):
       output_channel_entities.append(
         InputChannel(d.entity.id, d.entity.access_hash))
 
-  # Use logging and print messages on your console.
-  logging.info(
-    f"Listening on {len(input_channels_entities)} channels. Forwarding messages to {len(output_channel_entities)} channels."
-  )
-
   # TELEGRAM NEW MESSAGE - When new message triggers, come here
-
   @client.on(events.NewMessage(chats=input_channels_entities))
   async def handler(event):
     for output_channel in output_channel_entities:
-      
-      folder = await event.message.download_media("downloads/")
+      message = event.message
+      folder = ""
+      if event.message.media:
+        if message.file.size<8000000 :
+          folder = await message.download_media("downloads/")
+          
+      #if folder.endswith("mp4") or folder.endswith("MP4"):
+      #  from_path   = os.path.join("downloads/", old_filename[1])
+      #  to_path     = os.path.join("downloadsMP4", old_filename[1].rsplit('.', 1)[0]) + '.' + "mp4"
+      #  clip = mp.VideoFileClip(from_path)
+      #  clip.write_videofile(to_path)
+      #  folder = to_path
 
-      print(event.message.chat_id)
-      if folder is not None:
-        parsed_response = str(event.message.chat_id)+"@"+event.message.message +"@"+folder
-        print(parsed_response)
-      else:
-        parsed_response = str(event.message.chat_id)+"@"+event.message.message +"@"
+      parsed_response = str(message.chat_id)+"@"+message.message +"@"+folder
+      print(parsed_response)
       
       subprocess.call(["python", "discord_messager.py", parsed_response])
-      await client.forward_messages(output_channel, event.message)
-      #shutil.rmtree("downloads")
-      os.remove(folder)
+      await client.forward_messages(output_channel, message)
+
+      try:
+        os.remove(folder)
+      except:
+        print("")
 
   keep_alive()
   client.run_until_disconnected()
