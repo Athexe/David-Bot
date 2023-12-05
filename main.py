@@ -47,8 +47,8 @@ def start(config):
       #  clip.write_videofile(to_path)
       #  folder = to_path
 
-      parsed_response = str(message.chat_id)+"@"+message.message +"@"+folder
-      print(parsed_response)
+      parsed_response = str(message.chat_id)+"%!@"+message.message +"%!@"+folder
+      #print(parsed_response)
       
       subprocess.call(["python", "discord_messager.py", parsed_response])
       await client.forward_messages(output_channel, message)

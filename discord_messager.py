@@ -15,7 +15,7 @@ discord_client = discord.Client(intents=intents)
 
 # Get our data from argument
 message = sys.argv[1] 
-data = message.split("@")
+data = message.split("%!@")
 
 @discord_client.event
 async def on_ready():
